@@ -54,14 +54,20 @@ function App() {
     getProducts();
   }, [page, category, price, sort]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [category, price]);
+
   return (
     <div className="App">
       {/* SIDEBAR */}
       <div className="sidebar">
         {/* SEARCH */}
         <div className="search">
-          <input type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
-          <button onClick={() => getProducts()}>Search</button>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <input type="text" placeholder="Search..." onChange={(e) => setSearch(e.target.value)} />
+            <button onClick={() => { getProducts(); setPage(1); }}>Search</button>
+          </form>
         </div>
         {/* FILTER */}
         <div className="filter">

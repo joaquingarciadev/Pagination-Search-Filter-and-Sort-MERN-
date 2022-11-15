@@ -17,14 +17,6 @@ const getProducts = async (req, res) => {
         "Black",
         "White",
     ];
-    const orderings = [
-        "Newest",
-        "Oldest",
-        "A - Z",
-        "Z - A",
-        "Price Low to High",
-        "Price High to Low",
-    ];
     // Pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -37,7 +29,7 @@ const getProducts = async (req, res) => {
     let minPrice = parseInt(price[0]) || 0;
     let maxPrice = parseInt(price[1]) || 100000;
     // Sort
-    const sort = req.query.sort || "";
+    const sort = req.query.sort || "Newest";
     const sortObject = {};
     if (sort === "Newest") {
         sortObject.createdAt = -1;
@@ -55,24 +47,18 @@ const getProducts = async (req, res) => {
 
     const products = await Product.find({
         name: { $regex: search, $options: "i" },
+        category: { $in: [...category] },
+        price: { $gte: minPrice, $lte: maxPrice },
     })
-        .where("category")
-        .in([...category])
-        .where("price")
-        .gte(minPrice)
-        .lte(maxPrice)
         .sort(sortObject)
         .skip(skip)
         .limit(limit);
 
     const total = await Product.countDocuments({
         name: { $regex: search, $options: "i" },
-    })
-        .where("category")
-        .in([...category])
-        .where("price")
-        .gte(minPrice)
-        .lte(maxPrice);
+        category: { $in: [...category] },
+        price: { $gte: minPrice, $lte: maxPrice },
+    });
 
     const pages = Math.ceil(total / limit);
 
