@@ -1,0 +1,7 @@
+# API
+# dependencies
+/api/node_modules
+
+# CLIENT
+# dependencies
+/client/node_modules
