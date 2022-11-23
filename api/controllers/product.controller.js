@@ -24,8 +24,8 @@ const getProducts = async (req, res) => {
     // Search
     const search = req.query.search || "";
     // Filter
-    let category = req.query.category.length > 0 ? req.query.category.split(",") : categories;
-    let price = req.query.price.length > 0 ? req.query.price.split(",") : [0, 100000];
+    let category = req.query.category && req.query.category.length > 0 ? req.query.category.split(",") : categories;
+    let price = req.query.price && req.query.price.length > 0 ? req.query.price.split(",") : [0, 100000];
     let minPrice = parseInt(price[0]) || 0;
     let maxPrice = parseInt(price[1]) || 100000;
     // Sort
